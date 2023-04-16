@@ -1,12 +1,13 @@
-import { compare } from 'bcrypt'
 import { appConfig } from 'config/app_config'
 import express from 'express'
-import { handle404 } from 'middlewares/404'
-import { checkAuth } from 'middlewares/isAuthenticated'
+import { handle404 } from 'routes/404'
+import { isAuthenticated } from 'middlewares/isAuthenticated'
 import { authRouter } from 'routes/auth'
 import { taskRouter } from 'routes/task'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
-const app = express()
+export const app = express()
 
 const PORT = appConfig.express.port
 
@@ -24,11 +25,19 @@ async function startServer() {
 
 startServer()
 
+const corsOptions = {
+    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    credentials: true
+}
+
+app.use(cors(corsOptions));
+
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 
-app.use('/api/task', checkAuth, taskRouter)
+app.use('/api/task', isAuthenticated, taskRouter)
 app.use('/auth/', authRouter)
 
 

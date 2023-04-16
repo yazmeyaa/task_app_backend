@@ -53,13 +53,13 @@ export async function register(req: TypedRequest, res: TypedResponse) {
     }
 
     if (isEmailNotAvailable) {
-        return res.status(403).json({
+        return res.status(400).json({
             error: "This email address is not available"
         })
     }
     if (isUsernameNotAvailable) {
-        return res.status(403).json({
-            error: "This username address is not available"
+        return res.status(400).json({
+            error: "This username is not available"
         })
     }
 

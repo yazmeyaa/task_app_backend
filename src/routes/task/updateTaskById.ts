@@ -60,7 +60,6 @@ export async function updateTaskById(req: TypedRequest, res: TypedResponse) {
         })
     }
     catch (err) {
-        console.log(err)
         return res.status(400).json({
             error: "Some error!"
         })

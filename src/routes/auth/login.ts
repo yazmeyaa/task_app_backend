@@ -15,7 +15,6 @@ interface RequestBody {
 interface ResponseBody {
     error?: string
     message?: string
-    token?: string
 }
 
 type TypedRequest = Request<any, any, RequestBody>
@@ -45,7 +44,7 @@ async function login(req: TypedRequest, res: TypedResponse) {
     bcrypt.compare(password, findUser.password)
         .then(result => {
             if (result === false) {
-                return res.status(401).json({
+                return res.status(403).json({
                     error: "Wrong username or password"
                 })
             } else if (result === true) {
@@ -53,10 +52,9 @@ async function login(req: TypedRequest, res: TypedResponse) {
                 const token = jwt.sign({ id: findUser.id }, appConfig.jwt.secret, {
                     expiresIn: appConfig.jwt.expiresIn
                 })
-
+                res.cookie('token', token, { httpOnly: true })
                 return res.status(200).json({
                     message: "Successfull authorization",
-                    token: token
                 })
             }
         })
