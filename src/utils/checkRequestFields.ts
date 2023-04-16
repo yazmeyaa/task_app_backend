@@ -8,9 +8,5 @@ export function checkRequiredFields(requestBody: Request['body'], requiredFields
         if (bodyFieldsArray.includes(requiredField) === false) missedFields.push(requiredField)
     }
 
-    console.log('Required fields: ', requiredFields)
-    console.log('Recieved fields: ', bodyFieldsArray)
-    console.log('Missed fields: ', missedFields)
-
     return missedFields
 }
